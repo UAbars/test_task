@@ -1,0 +1,34 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+        - "8080:80"
+    networks:
+       - test_task
+    volumes:
+        - ./nginx/www:/var/www/html/
+        - ./nginx/conf:/etc/nginx/conf.d/
+        - ./nginx/logs:/var/log/nginx/
+    links:
+        - php
+  php:
+    image: php:7.4-fpm
+    networks:
+      - test_task
+    volumes:
+        - ./nginx/www:/var/www/html
+   
+    networks:
+      - test_task
+    links:
+        - redis
+  redis:
+    image: redis:latest
+    networks:
+      - test_task
+
+
+networks:
+  test_task:
+    name: test_task
